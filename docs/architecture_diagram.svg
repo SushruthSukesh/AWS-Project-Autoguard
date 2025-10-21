@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780">
+  <style>
+    .box { fill:#f7fafc; stroke:#2d3748; stroke-width:2px; rx:8; }
+    .service { font: 14px 'Segoe UI', Roboto, Arial; fill:#1a202c; }
+    .title { font: 16px 'Segoe UI', Roboto, Arial; font-weight:700; fill:#0f172a }
+    .small { font-size:12px; fill:#334155 }
+    .arrow { stroke:#0f172a; stroke-width:2; marker-end:url(#arrowhead); }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0f172a" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="30" class="title">AutoGuard architecture (demo)</text>
+  <text x="40" y="52" class="small">Bedrock AgentCore + SageMaker anomaly detector + safe remediator (Lambda) + Nova Act bridge</text>
+
+  <!-- Left: Observability/Data sources -->
+  <rect x="40" y="90" width="240" height="150" class="box"/>
+  <text x="60" y="118" class="service">Observability & Data Sources</text>
+  <text x="60" y="140" class="small">CloudWatch metrics</text>
+  <text x="60" y="158" class="small">Cost Explorer / Billing</text>
+  <text x="60" y="176" class="small">GuardDuty / Config (optional)</text>
+
+  <!-- Center: AgentCore & LLM -->
+  <rect x="350" y="70" width="360" height="210" class="box"/>
+  <text x="370" y="100" class="service">Bedrock AgentCore (Planner, ToolInvoker)</text>
+  <text x="370" y="122" class="small">LLM reasoning (chain-of-thought)</text>
+
+  <!-- SageMaker -->
+  <rect x="740" y="90" width="300" height="100" class="box"/>
+  <text x="760" y="120" class="service">SageMaker Endpoint</text>
+  <text x="760" y="140" class="small">Cost anomaly model (IsolationForest demo)</text>
+
+  <!-- Arrow: Data -> AgentCore -->
+  <path d="M280 160 L350 160" class="arrow" />
+  <text x="300" y="150" class="small">metrics/events</text>
+
+  <!-- Arrow: AgentCore -> SageMaker -->
+  <path d="M710 135 L740 135" class="arrow" />
+  <text x="610" y="125" class="small">score request</text>
+  <path d="M1040 145 L1100 145" class="arrow" transform="translate(-0,0)" style="stroke-dasharray:6,4;"/>
+
+  <!-- Bottom left: S3 + DynamoDB -->
+  <rect x="40" y="270" width="240" height="140" class="box"/>
+  <text x="60" y="300" class="service">S3 (audit logs & artifacts)</text>
+  <text x="60" y="322" class="small">incident evidence, metric snapshots</text>
+  <rect x="350" y="300" width="240" height="110" class="box"/>
+  <text x="370" y="330" class="service">DynamoDB (Agent Memory)</text>
+  <text x="370" y="350" class="small">incident records, approvals</text>
+
+  <!-- Lambda Remediator -->
+  <rect x="740" y="260" width="300" height="120" class="box"/>
+  <text x="760" y="295" class="service">Lambda Remediator</text>
+  <text x="760" y="315" class="small">safe actions via boto3 (stop/tag) - dry-run by default</text>
+
+  <!-- Arrows: AgentCore <-> S3/DynamoDB/Lambda -->
+  <path d="M530 230 L530 300" class="arrow" />
+  <text x="540" y="245" class="small">store evidence</text>
+
+  <path d="M530 230 L470 350" class="arrow" />
+  <text x="440" y="260" class="small">write incident</text>
+
+  <path d="M710 230 L740 300" class="arrow" />
+  <text x="710" y="265" class="small">invoke remediator</text>
+
+  <!-- Nova Act -->
+  <rect x="740" y="420" width="300" height="90" class="box"/>
+  <text x="760" y="450" class="service">Nova Act Bridge</text>
+  <text x="760" y="470" class="small">browser automation / external flows (optional)</text>
+
+  <path d="M830 380 L830 420" class="arrow"/>
+  <text x="840" y="380" class="small">trigger external flows</text>
+
+  <!-- IAM and User approval -->
+  <rect x="40" y="440" width="240" height="120" class="box"/>
+  <text x="60" y="470" class="service">IAM & Approvals</text>
+  <text x="60" y="490" class="small">approval tokens, safe-mode (dry_run)</text>
+
+  <path d="M470 380 L470 440" class="arrow" />
+  <text x="480" y="380" class="small">approval request</text>
+
+  <!-- Streamlit / Demo UI -->
+  <rect x="350" y="420" width="360" height="120" class="box"/>
+  <text x="370" y="450" class="service">Streamlit Demo UI / CLI</text>
+  <text x="370" y="470" class="small">runs local simulation, triggers demo events</text>
+
+  <path d="M530 420 L530 350" class="arrow" />
+  <text x="540" y="405" class="small">invoke simulation</text>
+
+  <!-- Legend -->
+  <rect x="1020" y="60" width="160" height="220" fill="#fff8f1" stroke="#c2410c" rx="6"/>
+  <text x="1040" y="86" class="service">Legend & Techs</text>
+  <text x="1040" y="108" class="small">- Bedrock AgentCore (LLM)</text>
+  <text x="1040" y="126" class="small">- SageMaker (model endpoint)</text>
+  <text x="1040" y="144" class="small">- Lambda (remediator)</text>
+  <text x="1040" y="162" class="small">- S3, DynamoDB, CloudWatch, EventBridge</text>
+  <text x="1040" y="180" class="small">- Nova Act bridge (optional)</text>
+  <text x="1040" y="198" class="small">- Streamlit demo UI</text>
+
+  <!-- Footer -->
+  <text x="40" y="760" class="small">Generated by AutoGuard demo — components show core interactions: detection & scoring, reasoning, safe remediation and reporting.</text>
+</svg>

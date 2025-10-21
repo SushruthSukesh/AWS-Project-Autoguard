@@ -33,3 +33,18 @@ Use AWS Secrets Manager to store credentials and API keys.
 
 
 ---
+
+## Architecture Diagram (required)
+
+The architecture diagram is included in this repository as `docs/architecture_diagram.svg` (and `docs/architecture_diagram.png` placeholder).
+
+Key components and interactions:
+- Observability / Data Sources: CloudWatch metrics, Cost Explorer, GuardDuty — feed events/metrics to the Agent.
+- Bedrock AgentCore: LLM-based planner and tool invoker. Receives events, calls the SageMaker endpoint, reasons about remediation actions, and coordinates tools.
+- SageMaker Endpoint: Hosts the time-series anomaly detector (IsolationForest demo). Returns anomaly indices and scores.
+- Lambda Remediator: Performs safe AWS operations (stop, tag) in dry-run mode by default; writes results to DynamoDB and S3.
+- Nova Act Bridge: Optional browser automation / external flows for vendor portal tasks and notifications.
+- S3 & DynamoDB: Artifact and incident storage (audit logs, model evidence, incident records).
+- Streamlit Demo UI: Simple app to run local simulations and download incident summaries.
+
+See `docs/architecture_diagram.svg` for a visual representation of these interactions.
