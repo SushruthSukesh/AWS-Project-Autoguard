@@ -1,0 +1,38 @@
+agent:
+  name: "autoguard-cost-security-agent"
+  description: "Autonomous agent that monitors cost anomalies and low-severity security issues; investigates and executes safe remediations or requests approval."
+  primitives:
+    - Planner
+    - ToolInvoker
+    - Memory
+    - Observability
+  llm:
+    provider: "bedrock"
+    model_id: "amazon.j2.large"   # placeholder - choose available reasoning model in your region
+    temperature: 0.0
+    max_tokens: 1024
+  tools:
+    - name: "cost_analyzer"
+      description: "Scores cost time-series for anomalies via SageMaker endpoint"
+      invoke_endpoint: "autoguard-cost-anom-endpoint"
+      timeout_seconds: 30
+    - name: "remediator"
+      description: "Executes pre-approved safe remediations (dry-run by default)"
+      lambda_name: "RemediatorFunction"
+    - name: "nova_act"
+      description: "Runs Nova Act flows for browser-only tasks"
+      enabled: true
+  memory:
+    backend: "dynamodb"
+    table_name: "AgentMemory"
+  observability:
+    logs: "cloudwatch"
+    audit_bucket: "autoguard-audit-bucket"
+  safety:
+    mode: "dry_run"   # set to "execute" only after manual review
+    approval_required_for:
+      - "delete"
+      - "terminate"
+      - "remove_iam"
+  policies:
+    iam_role: "arn:aws:iam::YOUR_ACCOUNT:role/AutoGuardAgentRole"  # replace in deployment

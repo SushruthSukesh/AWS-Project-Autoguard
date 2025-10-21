@@ -1,0 +1,7 @@
+boto3>=1.26.0
+aws-cdk-lib>=2.80.0
+constructs>=10.0.0
+scikit-learn>=1.2.0
+joblib
+requests
+pytest
